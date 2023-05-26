@@ -1,0 +1,244 @@
+CREATE DATABASE LOCADORA_VEICULOS
+
+CREATE TABLE PESSOAS (CPF CHAR(11) PRIMARY KEY, NOME VARCHAR(200),ENDERECO VARCHAR(500), EMAIL VARCHAR(100),DATA_NASCIMENTO DATE,
+TELEFONE VARCHAR(11));
+
+CREATE TABLE FUNCIONARIO (CPF_FUNCIONARIO CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES PESSOAS (CPF),SALARIO REAL);
+
+CREATE TABLE GERENTE (CPF_GERENTE CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES FUNCIONARIO (CPF_FUNCIONARIO));
+
+CREATE TABLE LAVADOR (CPF_LAVADOR CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES FUNCIONARIO (CPF_FUNCIONARIO));
+
+CREATE TABLE MECANICO (CPF_MECANICO CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES FUNCIONARIO (CPF_FUNCIONARIO));
+
+CREATE TABLE VENDEDOR (CPF_VENDEDOR CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES FUNCIONARIO (CPF_FUNCIONARIO));
+
+CREATE TABLE CLIENTE (CPF_CLIENTE CHAR(11) PRIMARY KEY FOREIGN KEY REFERENCES PESSOAS (CPF), 
+COD_CADASTRO INT, NOTA REAL);
+
+CREATE TABLE FILIAL (CNPJ CHAR(14) PRIMARY KEY, DESPESAS REAL, LUCRO REAL, 
+CPF_GERENTE CHAR(11) FOREIGN KEY REFERENCES GERENTE (CPF_GERENTE));
+
+CREATE TABLE VEICULO (PLACA CHAR(7) PRIMARY KEY, DATA_MANUTENCAO DATE,
+DISPONIBILIDADE BIT NOT NULL, TIPO VARCHAR(20), ESTADO VARCHAR(50), DATA_LIMPEZA DATE);
+
+CREATE TABLE PAGAMENTO (VALOR REAL, FORMA_PAGAMENTO INT NOT NULL, 
+CPF_CLIENTE CHAR(11), NUMERO_PAGAMENTO INT, CONSTRAINT PK PRIMARY KEY (CPF_CLIENTE,NUMERO_PAGAMENTO), 
+CONSTRAINT FK_CLIENTE FOREIGN KEY (CPF_CLIENTE) REFERENCES CLIENTE (CPF_CLIENTE));
+
+CREATE TABLE ALUGA (PLACA CHAR(7), CPF_CLIENTE CHAR(11), CPF_VENDEDOR CHAR(11), NUMERO_PAGAMENTO INT,
+CONSTRAINT PK_ALUGA PRIMARY KEY (PLACA, CPF_CLIENTE, CPF_VENDEDOR, NUMERO_PAGAMENTO),
+CONSTRAINT FK_ALUGAP FOREIGN KEY (PLACA) REFERENCES VEICULO (PLACA),
+CONSTRAINT FK_CPFC FOREIGN KEY (CPF_CLIENTE) REFERENCES CLIENTE (CPF_CLIENTE),
+CONSTRAINT FK_CPFV FOREIGN KEY (CPF_VENDEDOR) REFERENCES VENDEDOR (CPF_VENDEDOR));
+
+INSERT INTO PESSOAS (CPF, NOME, ENDERECO, EMAIL, DATA_NASCIMENTO, TELEFONE)
+VALUES
+('84515475451', 'Jose Mario Silva', 'Rua Silva Barros', 'silvab@gmail.com', '1985-08-03', '81988777888'),
+('78451423698', 'Ivaldo Fenandes', 'Rua A', 'if1@gmail.com', '2000-10-15', '81978565565'),
+('12324565487', 'Carlos Braz Silva', 'Rua B', 'cbs@gmail.com', '1991-06-26', '81987774110'),
+('84898778879', 'Joao Tenorio', 'Rua F', 'jt@gmail.com', '1984-12-10', '81987897897'),
+('78978978977', 'Rivaldo Souza', 'Rua E', 'rz@gmail.com', '1987-07-23', '81978787887'),
+('65465789879', 'Carla Azevedo', 'Rua D', 'ca@gmail.com', '1987-07-23', '81988888478'),
+('84545789797', 'Josefa Priscila', 'Rua C', 'jp@gmail.com', '1998-11-07', '81990245485'),
+('31645975879', 'Ivanildo Fenandes', 'Rua B', 'if@gmail.com', '1982-01-02', '81958989856'),
+('49878754564', 'Tafarel Roberto', 'Rua A', 'tf@gmail.com', '1996-03-19', '81986565656'),
+('87895651000', 'Jair Inacio', 'Rua B', 'ji@gmail.com', '1999-09-14', '81977877777'),
+('49878754155', 'Roberto Pedro', 'Rua G', 'rp@gmail.com', '2001-02-28', '81986565600'),
+('87895651001', 'Inacio Pinto', 'Rua H', 'ip@gmail.com', '1990-07-06', '81977877771'),
+('49878754777', 'Fernandes Roberto', 'Rua I', 'fr@gmail.com', '1983-10-09', '81986565659'),
+('87895651666', 'Jairo Paulo', 'Rua J', 'jp@gmail.com', '1995-12-25', '81977877770'),
+('49878754789', 'Robson Silva', 'Rua L', 'rs@gmail.com', '1993-04-17', '81986565651'),
+('87895651753', 'Inã Joao', 'Rua M', 'ij@gmail.com', '1989-06-30', '81977877776'),
+('49878754159', 'Paulo Fonseca', 'Rua N', 'pf@gmail.com', '1997-11-08', '81986565655'),
+('87895651456', 'Pedro Azevedo', 'Rua O', 'pa@gmail.com', '1988-05-12', '81977877773'),
+('13345678901', 'Guilherme Costa', 'Rua das Magnolias, 345', 'guilherme.costa@example.com', '1992-10-12', '81765432109'),
+('12456789015', 'Beatriz Rodrigues', 'Av. dos Lirios, 567', 'beatriz.rodrigues@example.com', '1987-07-29', '81654321098'),
+('34567890126', 'Gustavo Ferreira', 'Rua das Violetas, 123', 'gustavo.ferreira@example.com', '1984-04-15', '81543210987'),
+('45678901237', 'Amanda Souza', 'Alameda dos Crisantemos, 456', 'amanda.souza@example.com', '1991-12-01', '81432109876'),
+('56789012348', 'Diego Almeida', 'Av. Central, 789', 'diego.almeida@example.com', '1995-09-17', '81321098765'),
+('67890123459', 'Mariana Ribeiro', 'Rua das Hortensias, 234', 'mariana.ribeiro@example.com', '2003-06-03', '81210987654'),
+('78901234560', 'Roberto Pereira', 'Av. das Margaridas, 678', 'roberto.pereira@example.com', '1982-11-19', '81109876543'),
+('89012345680', 'Luciana Lima', 'Rua dos Jasmim, 56', 'luciana.lima@example.com', '1999-08-04', '81987654321'),
+('90123456770', 'Marcelo Silva', 'Travessa dos Cravos, 789', 'marcelo.silva@example.com', '1990-03-12', '81876543210'),
+('01234567893', 'Fernanda Mendes', 'Av. dos Girassois, 123', 'fernanda.mendes@example.com', '1998-12-26', '81765432109'),
+('12345678901', 'Leandro Santos', 'Rua das Azaleias, 345', 'leandro.santos@example.com', '1985-07-10', '81654321098'),
+('23456789012', 'Carolina Almeida', 'Av. das Orquideas, 567', 'carolina.almeida@example.com', '1988-04-27', '81543210987'),
+('34567890123', 'Rodrigo Oliveira', 'Rua dos Crisantemos, 123', 'rodrigo.oliveira@example.com', '1981-01-13', '81432109876'),
+('45678901234', 'Larissa Rodrigues', 'Alameda dos Girassois, 456', 'larissa.rodrigues@example.com', '1992-09-28', '81321098765'),
+('56789012345', 'Gabriel Mendonca', 'Av. das Magnolias, 789', 'gabriel.mendonca@example.com', '1995-06-15', '81210987654'),
+('67890123456', 'Isabela Castro', 'Rua das Lirios, 234', 'isabela.castro@example.com', '2003-03-01', '81109876543'),
+('78901234567', 'Marcelo Souza', 'Travessa das Hortensias, 678', 'marcelo.souza@example.com', '1982-10-16', '81987654321'),
+('89012345612', 'Bruna Lima', 'Av. dos Jasmim, 56', 'bruna.lima@example.com', '1999-07-02', '81876543210'),
+('90123706789', 'Rodrigo Silva', 'Rua das Margaridas, 789', 'rodrigo.silva@example.com', '1990-02-11', '81765432109'),
+('01234567891', 'Amanda Mendes', 'Av. dos Cravos, 123', 'amanda.mendes@example.com', '1998-11-24', '81654321098'),
+('89012345613', 'Sabrina Almeida', 'Rua das Azaleias, 678', 'sabrina.almeida@example.com', '1989-09-20', '81109876543'),
+('90123456789', 'Henrique Oliveira', 'Travessa das Flores, 56', 'henrique.oliveira@example.com', '1993-06-07', '81987654321'),
+('98765432109', 'Fulano de Tal', 'Rua dos Exemplos, 123', 'fulano@example.com', '1990-01-01', '81999999999'),
+('87654321098', 'Beltrano da Silva', 'Avenida das Amostras, 456', 'beltrano@example.com', '1985-05-10', '81888888888'),
+('76543210987', 'Ciclana Souza', 'Travessa dos Testes, 789', 'ciclana@example.com', '1995-12-15', '81777777777'),
+('65432109876', 'João Silva', 'Alameda das Demonstracões, 321', 'joao@example.com', '1988-07-20', '81666666666'),
+('54321098765', 'Maria Pereira', 'Praça dos Exemplos, 654', 'maria@example.com', '1992-03-05', '81555555555'),
+('43210987654', 'Pedro Alves', 'Estrada das Amostras, 987', 'pedro@example.com', '1997-09-25', '81444444444'),
+('32109876543', 'Ana Santos', 'Avenida dos Testes, 543', 'ana@example.com', '1993-11-12', '81333333333'),
+('21098765432', 'Carlos Oliveira', 'Rua das Demonstracões, 210', 'carlos@example.com', '1987-06-30', '81222222222'),
+('10987654321', 'Mariana Costa', 'Travessa das Amostras, 109', 'mariana@example.com', '1991-08-17', '81111111111'),
+('09876543210', 'Lucas Sousa', 'Alameda dos Testes, 098', 'lucas@example.com', '1994-04-08', '81000000000');
+
+INSERT INTO FUNCIONARIO (CPF_FUNCIONARIO, SALARIO)
+VALUES
+('84515475451', 1300.00),
+('78451423698', 1300.00),
+('12324565487', 1300.00),
+('84898778879', 1300.00),
+('78978978977', 1300.00),
+('65465789879', 1300.00),
+('84545789797', 1300.00),
+('31645975879', 1300.00),
+('89012345612', 1300.00),  
+('90123706789', 1300.00), 
+('13345678901', 1800.00),
+('12456789015', 1800.00),
+('34567890126', 1800.00),
+('45678901237', 1800.00),
+('56789012348', 1800.00),
+('67890123459', 1800.00),
+('78901234560', 1800.00),
+('89012345680', 1800.00),
+('90123456770', 1800.00),
+('01234567893', 1800.00),
+('49878754564', 5000.00),
+('87895651000', 5000.00),
+('49878754155', 5000.00),
+('87895651001', 5000.00),
+('49878754777', 5000.00),
+('87895651666', 5000.00),
+('49878754789', 5000.00),
+('87895651753', 5000.00),
+('49878754159', 5000.00),
+('87895651456', 5000.00),
+('98765432109', 2100.00),
+('87654321098', 2100.00),
+('76543210987', 2100.00),
+('65432109876', 2100.00),
+('54321098765', 2100.00),
+('43210987654', 2100.00),
+('32109876543', 2100.00),
+('21098765432', 2100.00),
+('10987654321', 2100.00),
+('09876543210', 2100.00);
+
+
+INSERT INTO GERENTE (CPF_GERENTE)
+VALUES ('49878754564'),
+       ('87895651000'),
+       ('49878754155'),
+       ('87895651001'),
+       ('49878754777'),
+       ('87895651666'),
+       ('49878754789'),
+       ('87895651753'),
+       ('49878754159'),
+       ('87895651456');
+
+INSERT INTO LAVADOR (CPF_LAVADOR)
+VALUES ('84515475451'),
+       ('78451423698'),
+       ('12324565487'),
+       ('84898778879'),
+       ('78978978977'),
+       ('65465789879'),
+       ('84545789797'),
+       ('31645975879'),
+       ('89012345612'), 
+       ('90123706789');  
+
+INSERT INTO MECANICO (CPF_MECANICO)
+VALUES ('13345678901'),
+       ('12456789015'),
+       ('34567890126'),
+       ('45678901237'),
+       ('56789012348'),
+       ('67890123459'),   
+       ('78901234560'),     
+       ('89012345680'),
+       ('90123456770'),
+       ('01234567893');
+
+INSERT INTO VENDEDOR (CPF_VENDEDOR) VALUES
+('98765432109'),
+('87654321098'),
+('76543210987'),
+('65432109876'),
+('54321098765'),
+('43210987654'),
+('32109876543'),
+('21098765432'),
+('10987654321'),
+('09876543210');
+
+
+INSERT INTO CLIENTE (CPF_CLIENTE, COD_CADASTRO, NOTA)
+VALUES ('12345678901', 1, 4.1),
+       ('23456789012', 2, 3.8),
+       ('34567890123', 3, 4.5),
+       ('45678901234', 4, 5.0),
+       ('56789012345', 5, 5.0),
+       ('67890123456', 6, 4.9),
+       ('78901234567', 7, 3.9),
+       ('01234567891', 10, 4.2),
+       ('89012345613', 11, 4.7),
+       ('90123456789', 12, 4.6);
+      
+
+INSERT INTO FILIAL (CNPJ, DESPESAS, LUCRO, CPF_GERENTE)
+VALUES
+  ('12765678901234', 5000.50, 7500.20, '49878754564'),
+  ('23456789012345', 4000.75, 6500.40, '87895651000'),
+  ('34567890123456', 5500.30, 8000.10, '49878754155'),
+  ('45678901234567', 6000.20, 9000.80, '87895651001'),
+  ('56755012345678', 4500.80, 7000.50, '49878754777'),
+  ('67660123456789', 7000.10, 8500.60, '87895651666'),
+  ('78911234567890', 5500.40, 7800.30, '49878754789'),
+  ('89212675678901', 4800.60, 7200.90, '87895651753'),
+  ('93125256789012', 6200.30, 9200.20, '49878754159'),
+  ('41234277890123', 5300.50, 7600.40, '87895651456');
+  
+INSERT INTO VEICULO (PLACA, DATA_MANUTENCAO, DISPONIBILIDADE, TIPO, ESTADO, DATA_LIMPEZA)
+VALUES
+    ('ABC1234', '2020-01-15', 1, 'Sedan', 'Bom', '2020-01-15'),
+    ('DEF5678', '2021-03-10', 0, 'SUV', 'Regular', '2021-03-10'),
+    ('GHI9012', '2020-07-22', 1, 'Hatchback', 'Excelente', '2020-07-22'),
+    ('JKL3456', '2022-11-05', 1, 'Sedan', 'Bom', '2022-11-05'),
+    ('MNO7890', '2021-09-18', 0, 'SUV', 'Regular', '2021-09-18'),
+    ('PQR2345', '2023-02-28', 1, 'Hatchback', 'Excelente', '2023-02-28'),
+    ('STU6789', '2020-04-12', 0, 'Sedan', 'Bom', '2020-04-12'),
+    ('VWX0123', '2022-06-25', 1, 'SUV', 'Regular', '2022-06-25'),
+    ('YZA4567', '2021-11-08', 1, 'Hatchback', 'Excelente', '2021-11-08'),
+    ('BCD8901', '2023-01-20', 0, 'Sedan', 'Bom', '2023-01-20');
+
+INSERT INTO PAGAMENTO (VALOR, FORMA_PAGAMENTO, CPF_CLIENTE, NUMERO_PAGAMENTO)
+VALUES
+    (100.00, 1, '12345678901', 1),
+    (50.00, 2, '23456789012', 2),
+    (75.00, 3, '34567890123', 3),
+    (200.00, 1, '45678901234', 4),
+    (150.00, 2, '56789012345', 5),
+    (80.00, 3, '67890123456', 6),
+    (120.00, 1, '78901234567', 7),
+    (90.00, 2, '89012345613', 8),
+    (180.00, 3, '90123456789', 9),
+    (60.00, 1, '01234567891', 10);
+
+INSERT INTO ALUGA (PLACA, CPF_CLIENTE, CPF_VENDEDOR, NUMERO_PAGAMENTO)
+VALUES
+    ('ABC1234', '12345678901', '98765432109', 1),
+    ('DEF5678', '23456789012', '87654321098', 2),
+    ('GHI9012', '34567890123', '76543210987', 3),
+    ('JKL3456', '45678901234', '65432109876', 4),
+    ('MNO7890', '56789012345', '54321098765', 5),
+    ('PQR2345', '67890123456', '43210987654', 6),
+    ('STU6789', '78901234567', '32109876543', 7),
+    ('VWX0123', '89012345613', '21098765432', 8),
+    ('YZA4567', '90123456789', '10987654321', 9),
+    ('BCD8901', '01234567891', '09876543210', 10);
